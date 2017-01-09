@@ -31,7 +31,38 @@ public:
 
     Response Process(const Request &request) {
         // write your code here
-    }
+
+        if(finish_time_.size()== size_ )
+        {
+
+            int st=std::max(finish_time_.back(),request.arrival_time);
+            int ft=st+request.process_time;
+            //checking if the queue is full already(equal to buffer size)
+            if(finish_time_.front()<=request.arrival_time)
+            {
+                finish_time_.pop();
+                finish_time_.push(ft);
+                return Response(0,st);
+            }
+            else
+            {
+                return Response(1,-1);
+            }
+        }
+        if(finish_time_.empty())
+            {
+                finish_time_.push(request.process_time);
+                return Response(0,request.arrival_time);
+            }
+
+        int st=std::max(finish_time_.back(),request.arrival_time);
+        int ft=st+request.process_time;
+        finish_time_.push(ft);
+        return Response(0,st);
+
+
+        }
+
 private:
     int size_;
     std::queue <int> finish_time_;
